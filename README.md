@@ -1,1 +1,1 @@
-# Final Project: Spotify & Pinterest API Mashup
+# Boardify: Spotify & Pinterest API Mashup
