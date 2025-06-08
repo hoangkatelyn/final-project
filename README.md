@@ -1,1 +1,1 @@
-# Boardify: Spotify & Pinterest API Mashup
+# LitTrack: Spotify & OpenLibrary API Mashup
