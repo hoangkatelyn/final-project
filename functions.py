@@ -20,10 +20,39 @@ def get_genres(resp):
                 lst.append(genre)
     return lst
 
-# analyze_genres(genres)
+# book_keywords(genres)
 # takes a list of genres
-# uses if, else, elif to match genres to keywords to search Open Library Subject API
+# uses if, else, elif to match genres to keywords to search Open Library API
 # returns a new list of keywords
+def book_keywords(genres):
+    keywords = []
+    for genre in genres:
+        if "r&b" in genre:
+            keywords.append("romance")
+            keywords.append("love")
+        elif "hyperpop" in genre:
+            keywords.append("queer")
+        elif "bedroom pop" in genre:
+            keywords.append("coming of age")
+        elif "pop" in genre:
+            keywords.append("comedy")
+            keywords.append("happy")
+        elif "rage rap" in genre:
+            keywords.append("dystopia")
+        elif "hip hop" or "rap" in genre:
+            keywords.append("action")
+            keywords.append("poetry")
+        elif "country" in genre:
+            keywords.append("western")
+            keywords.append("farm")
+        elif "rock" in genre:
+            keywords.append("rebellion")
+            keywords.append("counterculture")
+        elif "electronic" or "electro" or "techno" in genre:
+            keywords.append("sci-fi")
+            keywords.append("futurism")
+    unique_keywords = list(set(keywords))
+    return unique_keywords
 
 # get_books_data
 # consider splitting this up into different methods mayhaps
