@@ -4,20 +4,10 @@ from keys import CLIENT_ID, CLIENT_SECRET
 import pprint
 import json
 
-scope = "user-top-read"
+# get user's top 10 artists from Spotify (long-term) then provide book recommendations. decided this way because a lot of
+# the stuff on the web api is now deprecated
 
-client = OAuth2Session(CLIENT_ID, CLIENT_SECRET, scope=scope, redirect_uri="https://katelynhoang.pythonanywhere.com/")
-authorization_endpoint = "https://accounts.spotify.com/authorize"
-uri, state = client.create_authorization_url(authorization_endpoint)
-print("Please go to this URL and follow the prompts: {}".format(uri))
-
-authorization_response = input("Once you are redirected by your browser, copy the URL from your browser's address bar and enter it here: ")
-
-token_endpoint = "https://accounts.spotify.com/api/token"
-token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
-api_endpoint = "https://api.spotify.com/v1"
-resp = client.get(api_endpoint + "/me/top/artists?time_range=long_term&limit=10")
-#pprint.pprint(resp.text)
+# should we be calling any of these functions in another function like hw6?
 
 def get_genres(resp):
     stuff = resp.json()
@@ -29,7 +19,26 @@ def get_genres(resp):
             for genre in genres:
                 lst.append(genre)
     return lst
-print(get_genres(resp))
 
+# analyze_genres(genres)
+# takes a list of genres
+# uses if, else, elif to match genres to keywords to search Open Library Subject API
+# returns a new list of keywords
 
+# get_books_data
+# consider splitting this up into different methods mayhaps
 
+# first, use the list of keywords to look through Subject API
+# the Subject API returns titles, author, and related subjects associated with the chosen subject
+# get list of book titles
+#
+# after, use list of book titles to call for information about books using Search API ex:https://openlibrary.org/search.json?title=the+lord+of+the+rings
+# return list/map of book information (title, author, cover_edition_key)
+# cover_edition_key is also known as OLID to get covers using cover API
+#
+# next, get the cover by using the list/map of book information obtained previously.
+# use cover_edition_key and return a call like this https://covers.openlibrary.org/b/olid/OL7440033M-S.jpg
+# 1st part is they type of identifier
+# next is the OLID
+# final is the size of the image -S, -M, -L
+# more info on https://openlibrary.org/developers/api
