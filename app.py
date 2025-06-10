@@ -1,11 +1,7 @@
-from flask import Flask
-import functions
-import keys
-import os
-app = Flask(__name__)
 import json
+import functions
 
-from flask import Flask, redirect, session, url_for
+from flask import Flask, redirect, session, url_for, request, render_template
 from authlib.integrations.flask_client import OAuth
 
 from keys import SECRET_KEY, CLIENT_ID, CLIENT_SECRET
@@ -32,7 +28,7 @@ def index():
         return redirect(url_for("login"))
     print(dir(oauth.spotify))
     data = oauth.spotify.get("/me/top/artists?time_range=long_term&limit=10", token=token).text
-    return json.loads(data)
+    return render_template('index.html') and json.loads(data)
 
 @app.route("/login")
 def login():
@@ -41,7 +37,7 @@ def login():
     return oauth.spotify.authorize_redirect(redirect_uri)
 
 
-@app.route("/spotify-authorize")
+@app.route("/spotifyauthorize")
 def authorize():
     token = oauth.spotify.authorize_access_token()
     session["spotify-token"] = token
