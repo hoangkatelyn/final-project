@@ -3,6 +3,7 @@ from authlib.integrations.requests_client import OAuth2Session
 from keys import CLIENT_ID, CLIENT_SECRET
 import pprint
 import json
+import urllib.request
 
 def get_genres(resp):
     stuff = resp.json()
