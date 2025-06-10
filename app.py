@@ -28,20 +28,26 @@ def index():
         return redirect(url_for("login"))
     print(dir(oauth.spotify))
     data = oauth.spotify.get("/me/top/artists?time_range=long_term&limit=10", token=token).text
-    return render_template('index.html') and json.loads(data)
+    return render_template('index.html'), json.loads(data)
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    redirect_uri = url_for('authorize', _external=True)
-    print(redirect_uri)
-    return oauth.spotify.authorize_redirect(redirect_uri)
-
+    if request.method == "GET":
+        redirect_uri = url_for('authorize', _external=True)
+        print(redirect_uri)
+        return oauth.spotify.authorize_redirect(redirect_uri)
+    else:
+        return "Error"
 
 @app.route("/spotifyauthorize")
 def authorize():
     token = oauth.spotify.authorize_access_token()
     session["spotify-token"] = token
     return token
+
+# @app.route("/results", methods=["GET", "POST"])
+# def results():
+#
 
 if __name__ == "__main__":
     app.run(debug=True)
