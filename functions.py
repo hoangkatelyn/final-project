@@ -4,11 +4,6 @@ from keys import CLIENT_ID, CLIENT_SECRET
 import pprint
 import json
 
-# get user's top 10 artists from Spotify (long-term) then provide book recommendations. decided this way because a lot of
-# the stuff on the web api is now deprecated
-
-# should we be calling any of these functions in another function like hw6?
-
 def get_genres(resp):
     stuff = resp.json()
     artistLst = stuff["items"]
@@ -20,10 +15,6 @@ def get_genres(resp):
                 lst.append(genre)
     return lst
 
-# book_keywords(genres)
-# takes a list of genres
-# uses if, else, elif to match genres to keywords to search Open Library API
-# returns a new list of keywords
 def book_keywords(genres):
     keywords = []
     for genre in genres:
@@ -45,29 +36,25 @@ def book_keywords(genres):
         elif "country" in genre:
             keywords.append("western")
             keywords.append("farm")
-        elif "rock" in genre:
+        elif "rock" or "punk" or "metal" in genre:
             keywords.append("rebellion")
             keywords.append("counterculture")
         elif "electronic" or "electro" or "techno" in genre:
             keywords.append("sci-fi")
             keywords.append("futurism")
+        elif "jazz" or "house" or "funk" or "disco" in genre:
+            keywords.append("retro")
+            keywords.append("dance")
+        elif "classical" or "piano" in genre:
+            keywords.append("classical")
+            keywords.append("history")
+        elif "christian" in genre:
+            keywords.append("jesus")
+            keywords.append("christianity")
     unique_keywords = list(set(keywords))
     return unique_keywords
 
-# get_books_data
-# consider splitting this up into different methods mayhaps
-
-# first, use the list of keywords to look through Subject API
-# the Subject API returns titles, author, and related subjects associated with the chosen subject
-# get list of book titles
-#
-# after, use list of book titles to call for information about books using Search API ex:https://openlibrary.org/search.json?title=the+lord+of+the+rings
-# return list/map of book information (title, author, cover_edition_key)
-# cover_edition_key is also known as OLID to get covers using cover API
-#
-# next, get the cover by using the list/map of book information obtained previously.
-# use cover_edition_key and return a call like this https://covers.openlibrary.org/b/olid/OL7440033M-S.jpg
-# 1st part is they type of identifier
-# next is the OLID
-# final is the size of the image -S, -M, -L
-# more info on https://openlibrary.org/developers/api
+def get_cover(olid):
+    if olid is None:
+        return None
+    return "https://covers.openlibrary.org/b/olid/" + olid + "-M.jpg"
