@@ -28,8 +28,8 @@ def index():
     except KeyError:
         return redirect(url_for("login"))
     print(dir(oauth.spotify))
-    data = oauth.spotify.get("/me/top/artists?time_range=long_term&limit=10", token=token).text
-    return render_template('index.html'), json.loads(data)
+    # data = oauth.spotify.get("/me/top/artists?time_range=long_term&limit=10", token=token).text
+    return render_template('index.html')
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -44,7 +44,7 @@ def login():
 def authorize():
     token = oauth.spotify.authorize_access_token()
     session["spotify-token"] = token
-    return render_template('results.html'), token
+    return redirect("/results")
 
 @app.route("/results", methods=["GET", "POST"])
 def results():
@@ -52,11 +52,21 @@ def results():
         token = session["spotify-token"]
     except KeyError:
         return redirect(url_for("login"))
-    data = oauth.spotify.get("/me/top/artists", token=token).text
+    # data = oauth.spotify.get("/me/top/artists", token=token).text
+    print(token)
+    data = oauth.spotify.get("/me/top/tracks?time_range=long_term&limit=10", token=token).text
+    print(data)
     genres = functions.get_genres(data)
     keywords = functions.book_keywords(genres)
     books = functions.get_books(keywords)
-    return render_template(results.html, books=books)
+    # books looks like {title: {author: name, covers: olid}, ...}
+    # titles = books.keys()
+    # authors = []
+    # covers = []
+    # for title in titles:
+    #     authors.append(books[title]["author"])
+    #     covers.append(functions.get_cover(books[title]["cover"]))
+    return render_template('results.html', books=books)
 
 
 if __name__ == "__main__":
