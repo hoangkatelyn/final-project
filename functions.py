@@ -6,7 +6,8 @@ import json
 import urllib.request
 
 def get_genres(resp):
-    stuff = resp.json()
+    stuff = json.loads(resp)
+    print(stuff)
     artistLst = stuff["items"]
     lst = []
     for artist in artistLst:
