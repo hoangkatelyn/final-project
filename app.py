@@ -4,6 +4,7 @@ import functions
 from flask import Flask, redirect, session, url_for, request, render_template
 from authlib.integrations.flask_client import OAuth
 
+from functions import book_keywords
 from keys import SECRET_KEY, CLIENT_ID, CLIENT_SECRET
 
 app = Flask(__name__)
@@ -43,11 +44,20 @@ def login():
 def authorize():
     token = oauth.spotify.authorize_access_token()
     session["spotify-token"] = token
-    return token
+    return render_template('results.html'), token
 
-# @app.route("/results", methods=["GET", "POST"])
-# def results():
-#
+@app.route("/results", methods=["GET", "POST"])
+def results():
+    try:
+        token = session["spotify-token"]
+    except KeyError:
+        return redirect(url_for("login"))
+    data = oauth.spotify.get("/me/top/artists", token=token).text
+    genres = functions.get_genres(data)
+    keywords = functions.book_keywords(genres)
+    books = functions.get_books(keywords)
+    return render_template(results.html, books=books)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
