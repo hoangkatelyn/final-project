@@ -53,20 +53,23 @@ def results():
     except KeyError:
         return redirect(url_for("login"))
     # data = oauth.spotify.get("/me/top/artists", token=token).text
-    print(token)
-    data = oauth.spotify.get("/me/top/tracks?time_range=long_term&limit=10", token=token).text
-    print(data)
+    # print(token)
+    # data = oauth.spotify.get("/me/top/tracks?time_range=long_term&limit=10", token=token).text
+    # print(data)
+    data = oauth.spotify.get("me/top/artists/?time_range=long_term&limit=10", token=token).text
     genres = functions.get_genres(data)
     keywords = functions.book_keywords(genres)
     books = functions.get_books(keywords)
     # books looks like {title: {author: name, covers: olid}, ...}
-    # titles = books.keys()
-    # authors = []
-    # covers = []
-    # for title in titles:
-    #     authors.append(books[title]["author"])
-    #     covers.append(functions.get_cover(books[title]["cover"]))
-    return render_template('results.html', books=books)
+    titles = books.keys()
+    authors = []
+    covers = []
+    urls = []
+    for title in titles:
+        authors.append(books[title]["author"])
+        covers.append(functions.get_cover(books[title]["cover"]))
+        urls.append(functions.get_url(books[title]["cover"]))
+    return render_template('results.html', books=books, titles=titles, authors=authors, covers=covers, urls=urls)
 
 
 if __name__ == "__main__":
