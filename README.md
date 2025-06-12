@@ -1,1 +1,1 @@
-# LitTrack: Spotify & OpenLibrary API Mashup
+# Bookify: Spotify & OpenLibrary API Mashup
