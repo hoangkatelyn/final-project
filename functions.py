@@ -26,7 +26,7 @@ def book_keywords(genres):
         elif "hyperpop" in genre:
             keywords.append("queer")
         elif "bedroom pop" in genre:
-            keywords.append("coming of age")
+            keywords.append("coming+of+age")
         elif "pop" in genre:
             keywords.append("comedy")
             keywords.append("happy")
@@ -61,6 +61,11 @@ def get_cover(olid):
         return None
     return "https://covers.openlibrary.org/b/olid/" + olid + "-M.jpg"
 
+def get_url(olid):
+    if olid is None:
+        return None
+    return "https://openlibrary.org/olid/" + olid
+
 def get_books(lst_keywords):
    books = {}
    index = 0
@@ -79,6 +84,7 @@ def get_books(lst_keywords):
        result = works[i]
        title = result["title"]
        author = result["author_name"][0]
+       cover = ""
        if len(result["cover_edition_key"]) != 0:
            cover = result["cover_edition_key"]
        else:
