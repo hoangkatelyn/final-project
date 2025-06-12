@@ -1,10 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for title in titles %}
-        <ul class = "list-group">
-            <li class="list-group-item"><h1>{{ title }}</h1></li>
-        </ul>
-    {% endfor %}
+
+    <div class="container mt-4">
+        {% if books|length != 10 %}
+            <div class="alert alert-danger">Sorry, could not find any results for your query: "{{ place }}". Please go back and try again.</div>
+        {% else %}
+            {% for title in titles %}
+                <div class = "row mb-4 align-items-center">
+                    <div class="col-md-3 text-center">
+                        <img src="{{ covers[loop.index0] }}" alt="Cover image for {{ title }}" class="img-fluid rounder shadow">
+                    </div>
+                    <div class="col-md-9">
+                        <h3>
+                            <a href="{{ urls[loop.index0] }}" target="_blank">
+                                {{ title }}
+                            </a>
+                        </h3>
+                        <p class="text-muted">by {{ authors[loop.index0] }}</p>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    </div>
 
 {% endblock %}
